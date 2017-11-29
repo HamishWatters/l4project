@@ -11,17 +11,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class QueryCoordinator {
+    private static final String STOPLIST_FILE = "stoplist.txt";
+
     private Index index;
     private MetaIndex meta;
     private Manager queryManager;
-    private Set<String> stopList;
+    private Set<String> stoplist;
 
     public QueryCoordinator()
     {
         this.index = Index.createIndex("index","data");
         this.meta = index.getMetaIndex();
         this.queryManager = new Manager(index);
-        this.stopList = importStoplist();
+        this.stoplist = importStoplist();
     }
 
 
@@ -29,7 +31,7 @@ public class QueryCoordinator {
     {
         StringBuilder titleBuilder = new StringBuilder("");
         for (String s: query.getTitle().split(" ")) {
-            if (!stopList.contains(s.toLowerCase()))
+            if (!stoplist.contains(s.toLowerCase()))
                 titleBuilder.append(s).append(" ");
         }
         String title = titleBuilder.toString();
@@ -39,7 +41,7 @@ public class QueryCoordinator {
             {
                 StringBuilder headingNoStoplist = new StringBuilder("");
                 for (String s : heading.split(" "))
-                    if (!stopList.contains(s.toLowerCase()))
+                    if (!stoplist.contains(s.toLowerCase()))
                         headingNoStoplist.append(s).append(" ");
                 SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + headingNoStoplist.toString());
                 srq.addMatchingModel("Matching", query.getModel().name());
@@ -59,7 +61,7 @@ public class QueryCoordinator {
         Set<String> words = new HashSet<>();
         try
         {
-            BufferedReader br = new BufferedReader(new FileReader("stoplist.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(STOPLIST_FILE));
             String s;
             s = br.readLine();
             while ( s != null)
