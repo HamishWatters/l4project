@@ -5,6 +5,7 @@ import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
 import org.terrier.structures.Index;
 import org.terrier.structures.MetaIndex;
+import org.terrier.terms.Stemmer;
 
 import java.io.*;
 import java.util.HashSet;
@@ -29,21 +30,13 @@ public class QueryCoordinator {
 
     public void executeQuery(Query query)
     {
-        StringBuilder titleBuilder = new StringBuilder("");
-        for (String s: query.getTitle().split(" ")) {
-            if (!stoplist.contains(s.toLowerCase()))
-                titleBuilder.append(s).append(" ");
-        }
-        String title = titleBuilder.toString();
+        String title = filterStopwords(query.getTitle());
         if (query.getHeadings() != null)
         {
             for (String heading : query.getHeadings())
             {
-                StringBuilder headingNoStoplist = new StringBuilder("");
-                for (String s : heading.split(" "))
-                    if (!stoplist.contains(s.toLowerCase()))
-                        headingNoStoplist.append(s).append(" ");
-                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + headingNoStoplist.toString());
+                heading = filterStopwords(heading);
+                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + heading);
                 srq.addMatchingModel("Matching", query.getModel().name());
                 queryManager.runSearchRequest(srq);
                 try {
@@ -53,6 +46,17 @@ public class QueryCoordinator {
                 }
             }
         }
+    }
+
+    private String filterStopwords(String startQuery)
+    {
+        StringBuilder endQueryBuilder = new StringBuilder("");
+        for (String word: startQuery.split(" "))
+        {
+            if (!stoplist.contains(word))
+                endQueryBuilder.append(word).append(" ");
+        }
+        return endQueryBuilder.toString();
     }
 
 

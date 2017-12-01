@@ -16,8 +16,8 @@ public class UserQueryConverter {
         {
             List<String> headings = new ArrayList<>();
             for (Object s: jsonObject.getJSONArray("headings"))
-                headings.add(s.toString());
-            processedQuery = new ArticleQuery(jsonObject.get("title").toString(), headings);
+                headings.add(s.toString().toLowerCase());
+            processedQuery = new ArticleQuery(jsonObject.get("title").toString().toLowerCase(), headings);
         }
         else
         {
