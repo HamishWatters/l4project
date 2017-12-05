@@ -5,9 +5,9 @@ import java.util.List;
 public class ArticleQuery extends Query {
 
     private String title;
-    private List<String> headings;
+    private List<Heading> headings;
 
-    public ArticleQuery(String title, List<String> headings) {
+    public ArticleQuery(String title, List<Heading> headings) {
         super();
         this.title = title;
         this.headings = headings;
@@ -17,27 +17,25 @@ public class ArticleQuery extends Query {
     {
         System.out.println(title);
         System.out.println();
-        for (String heading: headings)
+        for (Heading heading: headings)
         {
-            System.out.println(heading);
+            System.out.println(heading.toString());
         }
     }
 
-    @Override
     public String getTitle()
     {
         return this.title;
     }
 
-    @Override
-    public List<String> getHeadings()
+    public List<Heading> getHeadings()
     {
         return this.headings;
     }
 
-    public String getHeading(int headingNumber) {
+    public Heading getHeading(int headingNumber) {
         if (headingNumber >= headings.size())
-            return "";
+            return null;
         return headings.get(headingNumber);
     }
 }

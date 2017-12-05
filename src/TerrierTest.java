@@ -13,7 +13,6 @@ public class TerrierTest {
         }
         Query q = UserQueryConverter.generateQuery(args[0]);
         QueryCoordinator coordinator = new QueryCoordinator();
-        System.out.println("exitted coord");
         coordinator.executeQuery(q);
         ResultHandler.printResults(q);
 

@@ -20,7 +20,7 @@ public class SingleQuery extends Query {
     }
 
     @Override
-    public List<String> getHeadings() {
+    public List<Heading> getHeadings() {
         return null;
     }
 

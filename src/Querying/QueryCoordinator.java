@@ -5,7 +5,6 @@ import org.terrier.querying.Manager;
 import org.terrier.querying.SearchRequest;
 import org.terrier.structures.Index;
 import org.terrier.structures.MetaIndex;
-import org.terrier.terms.Stemmer;
 
 import java.io.*;
 import java.util.HashSet;
@@ -33,10 +32,14 @@ public class QueryCoordinator {
         String title = filterStopwords(query.getTitle());
         if (query.getHeadings() != null)
         {
-            for (String heading : query.getHeadings())
+            for (Heading heading : query.getHeadings())
             {
-                heading = filterStopwords(heading);
-                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + heading);
+                /**TODO: Have a module to do all this more neatly. Should conveniently put together
+                 * TODO: a query using the terrier querying language, with weights etc.
+                 */
+                String headingStr = heading.getHeading();
+                headingStr = filterStopwords(headingStr);
+                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + headingStr);
                 srq.addMatchingModel("Matching", query.getModel().name());
                 queryManager.runSearchRequest(srq);
                 try {

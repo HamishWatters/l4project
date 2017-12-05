@@ -2,10 +2,8 @@ package Querying;
 
 import Results.Result;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public abstract class Query {
     protected static final SearchModel DEFAULT_MODEL = SearchModel.BM25;
@@ -28,7 +26,7 @@ public abstract class Query {
     }
 
     public abstract void display();
-    public abstract List<String> getHeadings();
+    public abstract List<Heading> getHeadings();
     public abstract String getTitle();
 
     public long getQueryId()
