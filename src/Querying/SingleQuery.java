@@ -28,6 +28,4 @@ public class SingleQuery extends Query {
     public String getTitle() {
         return queryText;
     }
-
-    public String getQueryText(){return this.queryText;}
 }

@@ -3,6 +3,8 @@ import Querying.QueryCoordinator;
 import Querying.UserQueryConverter;
 import Results.ResultHandler;
 
+import java.io.File;
+
 public class TerrierTest {
     public static void main(String[] args) {
 
@@ -14,7 +16,7 @@ public class TerrierTest {
         Query q = UserQueryConverter.generateQuery(args[0]);
         QueryCoordinator coordinator = new QueryCoordinator();
         coordinator.executeQuery(q);
-        ResultHandler.printResults(q);
+        ResultHandler.writeResults(q, new File("out/results.txt"));
 
     }
 }

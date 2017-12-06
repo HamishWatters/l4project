@@ -7,8 +7,7 @@ import org.terrier.structures.Index;
 import org.terrier.structures.MetaIndex;
 
 import java.io.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class QueryCoordinator {
     private static final String STOPLIST_FILE = "stoplist.txt";
@@ -32,23 +31,48 @@ public class QueryCoordinator {
         String title = filterStopwords(query.getTitle());
         if (query.getHeadings() != null)
         {
-            for (Heading heading : query.getHeadings())
+            List<Heading> headingQueue = new ArrayList<>();
+            for (Heading heading: query.getHeadings())
+                heading.getAllNestedSubheadings(headingQueue);
+            for (Heading heading : headingQueue)
             {
-                /**TODO: Have a module to do all this more neatly. Should conveniently put together
-                 * TODO: a query using the terrier querying language, with weights etc.
-                 */
-                String headingStr = heading.getHeading();
-                headingStr = filterStopwords(headingStr);
-                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), title + headingStr);
+                String queryString = convertHeadingToTerrierLanguage(title,heading);
+                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
                 srq.addMatchingModel("Matching", query.getModel().name());
                 queryManager.runSearchRequest(srq);
-                try {
-                    query.addResult(new Result(meta.getItem("body", srq.getResultSet().getDocids()[0]), srq.getResultSet()));
-                } catch (IOException e) {
-                    query.addResult(new Result("", srq.getResultSet()));
+                try
+                {
+                    heading.setResult(new Result(meta.getItem("body", srq.getResultSet().getDocids()[0]), srq.getResultSet()));
+                }
+                catch (IOException e)
+                {
+                    heading.setResult(new Result("", srq.getResultSet()));
                 }
             }
         }
+        else
+        {
+            SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), query.getTitle());
+            srq.addMatchingModel("Matching", query.getModel().name());
+            queryManager.runSearchRequest(srq);
+            //TODO: SingleQuery needs to retain results somehow now that results are stored under headings
+            //TODO: Maybe worth just having a single query use one heading object
+        }
+    }
+
+    private String convertHeadingToTerrierLanguage(String title, Heading h)
+    {
+        Heading index = h;
+        int count = 1;
+        while ((index = index.getParent()) != null) count++;
+        StringBuilder terrierQuery = new StringBuilder();
+        for (int i = 0; i < count; i++)
+        {
+            terrierQuery.append(filterStopwords(h.getHeading())).append("^").append(i+1).append(" ");
+            h = h.getParent();
+        }
+        terrierQuery.append(title).append("^").append(count);
+        return terrierQuery.toString();
     }
 
     private String filterStopwords(String startQuery)
@@ -59,6 +83,7 @@ public class QueryCoordinator {
             if (!stoplist.contains(word))
                 endQueryBuilder.append(word).append(" ");
         }
+        endQueryBuilder.setLength(endQueryBuilder.length()-1);
         return endQueryBuilder.toString();
     }
 

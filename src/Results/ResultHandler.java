@@ -1,35 +1,64 @@
 package Results;
 
+import Querying.Heading;
 import Querying.Query;
-import Results.Result;
 
-import java.util.List;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ResultHandler {
+    private static final char NEW_LINE = '\n';
 
     private static String makeResults(Query query)
     {
         StringBuilder formattedResults = new StringBuilder("");
-        List<Result> results = query.getResults();
-        formattedResults.append(query.getTitle()).append("\n");
+        formattedResults.append(query.getTitle()).append(NEW_LINE);
         if (query.getHeadings() == null)
         {
-            formattedResults.append(results.get(0).getResultParagraph());
+//            formattedResults.append(results.get(0).getResultParagraph());
             return formattedResults.toString();
         }
         else
         {
-            for (int i = 0; i < query.getHeadings().size(); i++)
+            formattedResults.append(query.getTitle()).append(NEW_LINE);
+            for (Heading heading: query.getHeadings())
             {
-                formattedResults.append(query.getHeadings().get(i)).append("\n");
-                formattedResults.append(query.getResults().get(i).getResultParagraph()).append("\n");
+                formattedResults.append(heading.getHeading()).append(NEW_LINE);
+                formattedResults.append(heading.getResult().getResultParagraph()).append(NEW_LINE);
+                if (heading.hasSubheadings())
+                    recurseHeadingResults(formattedResults,heading);
             }
         }
         return formattedResults.toString();
     }
 
+    private static void recurseHeadingResults(StringBuilder sb, Heading heading)
+    {
+        for (Heading h: heading.getSubheadings())
+        {
+            sb.append((h.getHeading())).append(NEW_LINE);
+            sb.append(h.getResult().getResultParagraph()).append(NEW_LINE);
+            if (h.hasSubheadings())
+                recurseHeadingResults(sb, h);
+        }
+    }
+
     public static void printResults(Query query)
     {
         System.out.println(makeResults(query));
+    }
+    public static void writeResults(Query query, File file)
+    {
+        try
+        {
+            FileWriter fw = new FileWriter(file);
+            fw.write(makeResults(query));
+            fw.close();
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 }

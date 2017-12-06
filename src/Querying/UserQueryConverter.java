@@ -29,9 +29,7 @@ public class UserQueryConverter {
                 else if ((str = headingObjects.optString(i)) != null)
                     headings.add(new Heading(str));
                 else
-                {
                     throw new JSONException("Unable to parse query json");
-                }
             }
             for (Heading h: headings)
                 h.display();

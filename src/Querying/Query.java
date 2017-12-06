@@ -1,8 +1,5 @@
 package Querying;
 
-import Results.Result;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Query {
@@ -14,7 +11,6 @@ public abstract class Query {
     private SearchModel model;
     private SearchEngine engine;
     private long timestamp;
-    private List<Result> results;
 
     protected Query()
     {
@@ -22,7 +18,6 @@ public abstract class Query {
         this.engine = DEFAULT_ENGINE;
         this.queryId = nextQueryId++;
         this.timestamp = System.currentTimeMillis();
-        this.results = new ArrayList<>();
     }
 
     public abstract void display();
@@ -45,7 +40,6 @@ public abstract class Query {
     {
         return this.timestamp;
     }
-    public List<Result> getResults() {return this.results;}
 
     public void setModel(SearchModel model)
     {
@@ -54,11 +48,6 @@ public abstract class Query {
     public void setEngine(SearchEngine engine)
     {
         this.engine = engine;
-    }
-
-    public void addResult(Result result)
-    {
-        this.results.add(result);
     }
 
 
