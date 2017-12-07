@@ -60,6 +60,14 @@ public class QueryCoordinator {
         }
     }
 
+    /**
+     * @param title : title of the query
+     * @param h : query heading to be converted into query
+     * @return : a string representation of the query for that heading
+     * Produces a terrier query from a heading by adding a title, each nested subheading leading to
+     * the specified heading, and gives decreasing weights the further nested the heading has eg. the
+     * query title will have weight multiplied by how many parent headings the specified heading has
+     */
     private String convertHeadingToTerrierLanguage(String title, Heading h)
     {
         Heading index = h;
@@ -68,17 +76,17 @@ public class QueryCoordinator {
         StringBuilder terrierQuery = new StringBuilder();
         for (int i = 0; i < count; i++)
         {
-            terrierQuery.append(filterStopwords(h.getHeading())).append("^").append(i+1).append(" ");
+            terrierQuery.append("(").append(filterStopwords(h.getHeading())).append(")^").append(i+1).append(" ");
             h = h.getParent();
         }
-        terrierQuery.append(title).append("^").append(count);
+        terrierQuery.append("(").append(title).append(")^").append(count);
         return terrierQuery.toString();
     }
 
     private String filterStopwords(String startQuery)
     {
         StringBuilder endQueryBuilder = new StringBuilder("");
-        for (String word: startQuery.split(" "))
+        for (String word: startQuery.toLowerCase().split(" "))
         {
             if (!stoplist.contains(word))
                 endQueryBuilder.append(word).append(" ");

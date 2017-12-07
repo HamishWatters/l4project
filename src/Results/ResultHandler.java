@@ -21,7 +21,6 @@ public class ResultHandler {
         }
         else
         {
-            formattedResults.append(query.getTitle()).append(NEW_LINE);
             for (Heading heading: query.getHeadings())
             {
                 formattedResults.append(heading.getHeading()).append(NEW_LINE);

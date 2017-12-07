@@ -31,9 +31,7 @@ public class UserQueryConverter {
                 else
                     throw new JSONException("Unable to parse query json");
             }
-            for (Heading h: headings)
-                h.display();
-            processedQuery = new ArticleQuery(jsonObject.get("title").toString().toLowerCase(), headings);
+            processedQuery = new ArticleQuery(jsonObject.get("title").toString(), headings);
         }
         else
         {
@@ -91,7 +89,6 @@ public class UserQueryConverter {
         }
         else if((jarr = object.optJSONArray(heading.getHeading())) != null)
         {
-            System.out.println(heading.getHeading());
             processHeadingJsonArray(jarr, heading);
         }
     }
