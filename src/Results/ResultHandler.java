@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
 
 public class ResultHandler {
     private static final char NEW_LINE = '\n';
@@ -20,10 +18,14 @@ public class ResultHandler {
         this.query = query;
     }
 
+    /**
+     * For the current query, sets the result paragraph for each heading. Currently simply checks if a doc
+     * has already been used, and if so, takes the next document etc.
+     * TODO: Should use the score of the doc to determine which doc finds an alternative
+     */
     public void getBestDocumentNoDuplicates()
     {
         HashMap<Integer, Heading> usedDocs = new HashMap<>();
-        int docsFound = 0;
         ArrayList<Heading> headingQueue = new ArrayList<>();
         for (Heading h: query.getHeadings())
         {
@@ -43,18 +45,22 @@ public class ResultHandler {
                     bestDoc = docids[i];
                 }
             }
-            h.getResult().setResultParagraph(bestDoc);
+            h.getResult().setBestResult(bestDoc);
         }
 
     }
 
+    /**
+     * Converts query into title, heading, paragraph, etc.
+     * @return A string representation of the query results
+     */
     private String makeResults()
     {
         StringBuilder formattedResults = new StringBuilder("");
         formattedResults.append(query.getTitle()).append(NEW_LINE);
         if (query.getHeadings() == null)
         {
-//            formattedResults.append(results.get(0).getResultParagraph());
+//            formattedResults.append(results.get(0).getResultParagraph());  TODO: Redo logic for single queries
             return formattedResults.toString();
         }
         else
@@ -70,6 +76,11 @@ public class ResultHandler {
         return formattedResults.toString();
     }
 
+    /**
+     *  Runs through all nested headings and converts them into readable results.
+     * @param sb: StringBuilder to generate the result representation in
+     * @param heading: The heading to append to the builder
+     */
     private void recurseHeadingResults(StringBuilder sb, Heading heading)
     {
         for (Heading h: heading.getSubheadings())
@@ -81,10 +92,18 @@ public class ResultHandler {
         }
     }
 
+    /**
+     * Prints the results to stdout
+     */
     public void printResults()
     {
         System.out.println(makeResults());
     }
+
+    /**
+     * Writes the results to a specified file
+     * @param file
+     */
     public void writeResults(File file)
     {
         try

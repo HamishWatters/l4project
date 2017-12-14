@@ -10,6 +10,7 @@ public class Result {
     private Long timestamp;
     private MetaIndex meta;
     private String resultParagraph;
+    private int bestResult;                 // For use in ResultHandler while determining best docs for each heading
 
     public Result(ResultSet resultSet, MetaIndex meta)
     {
@@ -17,9 +18,11 @@ public class Result {
         this.meta = meta;
         this.timestamp = System.currentTimeMillis();
         this.resultParagraph = "";
+        this.bestResult = -1;
     }
 
     public ResultSet getResultSet() { return this.resultSet;}
+    public void setBestResult(int i) {this.bestResult = i;}
     public void setResultParagraph(int i)
     {
         try {
