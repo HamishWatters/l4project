@@ -45,6 +45,8 @@ public class Heading {
 
     public Heading getParent() { return this.parent; }
 
+    public boolean hasParent() { return this.parent != null;}
+
     public Result getResult() { return this.result; }
 
     public void setParent(Heading parent) { this.parent = parent; }

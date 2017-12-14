@@ -15,12 +15,12 @@ public class ArticleQuery extends Query {
 
     public void display()
     {
-        System.out.println(title);
-        System.out.println();
+        System.out.print(title + " [");
         for (Heading heading: headings)
         {
-            System.out.println(heading.toString());
+            heading.display();
         }
+        System.out.println("]");
     }
 
     public String getTitle()
@@ -31,6 +31,11 @@ public class ArticleQuery extends Query {
     public List<Heading> getHeadings()
     {
         return this.headings;
+    }
+
+    public void addHeading(Heading h)
+    {
+        this.headings.add(h);
     }
 
     public Heading getHeading(int headingNumber) {

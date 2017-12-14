@@ -16,7 +16,9 @@ public class TerrierTest {
         Query q = UserQueryConverter.generateQuery(args[0]);
         QueryCoordinator coordinator = new QueryCoordinator();
         coordinator.executeQuery(q);
-        ResultHandler.writeResults(q, new File("out/results.txt"));
+        ResultHandler handler = new ResultHandler(q);
+        handler.getBestDocumentNoDuplicates();
+        handler.writeResults(new File("out/results.txt"));
 
     }
 }

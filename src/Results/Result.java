@@ -1,21 +1,37 @@
 package Results;
 
 import org.terrier.matching.ResultSet;
+import org.terrier.structures.MetaIndex;
+
+import java.io.IOException;
 
 public class Result {
-    private String resultParagraph;
     private ResultSet resultSet;
     private Long timestamp;
+    private MetaIndex meta;
+    private String resultParagraph;
 
-    public Result(String resultParagraph, ResultSet resultSet)
+    public Result(ResultSet resultSet, MetaIndex meta)
     {
-        this.resultParagraph = resultParagraph;
         this.resultSet = resultSet;
+        this.meta = meta;
         this.timestamp = System.currentTimeMillis();
+        this.resultParagraph = "";
     }
 
     public ResultSet getResultSet() { return this.resultSet;}
-    public String getResultParagraph() { return this.resultParagraph;}
+    public void setResultParagraph(int i)
+    {
+        try {
+            this.resultParagraph = meta.getItem("body", i);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    public String getResultParagraph(int i)
+    {
+        return this.resultParagraph;
+    }
     public Long getTimestamp() { return this.timestamp;}
 
 }

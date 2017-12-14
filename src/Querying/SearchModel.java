@@ -2,5 +2,6 @@ package Querying;
 
 public enum SearchModel {
     BM25,
-    InL2
+    InL2,
+    DLH13
 }

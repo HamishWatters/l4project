@@ -25,9 +25,22 @@ public class QueryCoordinator {
         this.stoplist = importStoplist();
     }
 
+    public void generateTopicFile(List<ArticleQuery> queries) throws IOException {
+        FileWriter fw = new FileWriter("topics");
+        for (Query q: queries)
+        {
+            List<Heading> headingQueue = new ArrayList<>();
+            for (Heading h: q.getHeadings())
+                h.getAllNestedSubheadings(headingQueue);
+            for (Heading h: headingQueue)
+            {
+                fw.write(convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
+            }
+        }
+        fw.close();
+    }
 
-    public void executeQuery(Query query)
-    {
+    public void executeQuery(Query query) {
         String title = filterStopwords(query.getTitle());
         if (query.getHeadings() != null)
         {
@@ -36,18 +49,11 @@ public class QueryCoordinator {
                 heading.getAllNestedSubheadings(headingQueue);
             for (Heading heading : headingQueue)
             {
-                String queryString = convertHeadingToTerrierLanguage(title,heading);
+                String queryString = convertHeadingToTerrierLanguage(title,heading, true);
                 SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
                 srq.addMatchingModel("Matching", query.getModel().name());
                 queryManager.runSearchRequest(srq);
-                try
-                {
-                    heading.setResult(new Result(meta.getItem("body", srq.getResultSet().getDocids()[0]), srq.getResultSet()));
-                }
-                catch (IOException e)
-                {
-                    heading.setResult(new Result("", srq.getResultSet()));
-                }
+                heading.setResult(new Result(srq.getResultSet(), meta));
             }
         }
         else
@@ -68,18 +74,35 @@ public class QueryCoordinator {
      * the specified heading, and gives decreasing weights the further nested the heading has eg. the
      * query title will have weight multiplied by how many parent headings the specified heading has
      */
-    private String convertHeadingToTerrierLanguage(String title, Heading h)
+    private String convertHeadingToTerrierLanguage(String title, Heading h, boolean weighted)
     {
         Heading index = h;
         int count = 1;
         while ((index = index.getParent()) != null) count++;
         StringBuilder terrierQuery = new StringBuilder();
-        for (int i = 0; i < count; i++)
-        {
-            terrierQuery.append("(").append(filterStopwords(h.getHeading())).append(")^").append(i+1).append(" ");
-            h = h.getParent();
+        for (String s: title.split(" ")) {
+        terrierQuery.append(s);
+        if (weighted)
+            terrierQuery.append("^1.25");
+        terrierQuery.append(" ");
         }
-        terrierQuery.append("(").append(title).append(")^").append(count);
+        for (String s: h.getHeading().split(" "))
+        {
+            terrierQuery.append(s);
+            if (weighted)
+                terrierQuery.append("^1.55");
+            terrierQuery.append(" ");
+        }
+        float n = 1;
+        while (h.hasParent())
+        {
+            h = h.getParent();
+            terrierQuery.append(h.getHeading());
+            if (weighted)
+                terrierQuery.append("^").append(1-(n/10));
+            terrierQuery.append(" ");
+        }
+        System.out.println(terrierQuery.toString());
         return terrierQuery.toString();
     }
 

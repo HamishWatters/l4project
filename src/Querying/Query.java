@@ -3,7 +3,7 @@ package Querying;
 import java.util.List;
 
 public abstract class Query {
-    protected static final SearchModel DEFAULT_MODEL = SearchModel.BM25;
+    protected static final SearchModel DEFAULT_MODEL = SearchModel.DLH13;
     protected static final SearchEngine DEFAULT_ENGINE = SearchEngine.TERRIER;
 
     private static Long nextQueryId = 0L;

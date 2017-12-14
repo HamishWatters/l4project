@@ -1,6 +1,5 @@
 package Querying;
 
-import Querying.*;
 import org.json.*;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ public class UserQueryConverter {
         {
             List<Heading> headings = new ArrayList<>();
             JSONArray headingObjects = jsonObject.getJSONArray("headings");
-            for (int i=0; i < headingObjects.length(); i++)
+            for (int i = 0; i < headingObjects.length(); i++)
             {
                 String str;
                 JSONObject jobj;
@@ -41,14 +40,14 @@ public class UserQueryConverter {
         if (jsonObject.has("model"))
         {
             String modelString = jsonObject.get("model").toString();
-            for (SearchModel model: SearchModel.values())
+            for (SearchModel model : SearchModel.values())
                 if (model.name().equals(modelString))
                     processedQuery.setModel(model);
         }
         if (jsonObject.has("engine"))
         {
             String engineString = jsonObject.get("engine").toString();
-            for (SearchEngine engine: SearchEngine.values())
+            for (SearchEngine engine : SearchEngine.values())
                 if (engine.name().equals(engineString))
                     processedQuery.setEngine(engine);
         }
@@ -93,8 +92,10 @@ public class UserQueryConverter {
         }
     }
 
-    public static void main(String[] args) {
-        if (args.length != 1) {
+    public static void main(String[] args)
+    {
+        if (args.length != 1)
+        {
             System.err.println("Please supply a raw query string");
             System.exit(1);
         }
