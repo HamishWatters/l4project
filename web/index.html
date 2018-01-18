@@ -8,22 +8,24 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
-    <script src="querying.js"></script>
+    <script src="static/querying.js"></script>
+    <script src="https://use.fontawesome.com/f642c64c0e.js"></script>
+
 </head>
 <body>
 <div class="query-box" id="title-control">
-<div class="col-lg-6">
-    <div class="input-group">
-      <input type="text" class="form-control" placeholder="Title">
-      <span class="input-group-btn">
-        <button class="btn btn-secondary" type="button">Search</button>
-      </span>
+    <div class="col-lg-6">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Title">
+            <span class="input-group-btn">
+                <button class="search-btn btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+            </span>
+            <div class="input-group-btn add-top-heading-btn"><button class="btn search-btn btn-secondary" type="button"><i class="fa fa-plus"></i></button></div>
+        </div>
     </div>
-  </div>
+
 </div>
 <div id="start"></div>
-<div>
-    <input id="add-heading-button" type="button" class="add-heading-btn" name="addHeadingButton" value="+"/>
-</div>
+
 </body>
 </html>

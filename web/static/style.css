@@ -15,8 +15,26 @@
     margin-right: 0%;
 }
 
-.add-heading-btn {
-    margin-top: 10px;
-    width: 2%;
-    margin-left: 30%;
+.add-top-heading-btn {
+    margin-left: 5px;
+    height: 100%;
+}
+
+.delete-heading-btn {
+    margin-left: 5px;
+    height: 100%;
+}
+.delete-nested-heading-btn {
+    margin-left: 5px;
+    height: 100%;
+}
+
+.nested-query-box {
+    width: 90%;
+    margin-right:0%;
+    margin-top: 5px;
+}
+
+.search-btn {
+    height: 100%;
 }
