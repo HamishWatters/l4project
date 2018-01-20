@@ -47,6 +47,8 @@ public class ResultHandler {
             }
             h.getResult().setBestResult(bestDoc);
         }
+        for (Heading h: query.getHeadings())
+            h.getResult().setResultParagraph();
 
     }
 

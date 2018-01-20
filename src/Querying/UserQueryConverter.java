@@ -1,12 +1,63 @@
 package Querying;
 
+import Webserver.ClientQueryObjectAdaptor;
 import org.json.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserQueryConverter {
 
+    public static Query generateWebQuery(String webQuery)
+    {
+        JSONObject jsonObject = new JSONObject(ClientQueryObjectAdaptor.convertJson(webQuery));
+        Query processedQuery;
+        String title = "";
+        List<Heading> headings = new ArrayList<>();
+        if (jsonObject.has("headings"))
+        {
+            JSONArray headingObjects = jsonObject.getJSONArray("headings");
+            Heading[] headingArray = new Heading[headingObjects.length()];
+
+            title = headingObjects.getJSONArray(0).getString(0);
+            for (int i = 1; i < headingObjects.length(); i++)
+            {
+                JSONArray jarr;
+                if ((jarr = headingObjects.optJSONArray(i)) != null)
+                {
+                    String headingName;
+                    if ((headingName = jarr.optString(0)) != null)
+                    {
+                        Heading h = new Heading(headingName);
+                        headingArray[i] = h;
+                    }
+                }
+            }
+            for (int i = 1; i < headingObjects.length(); i++)
+            {
+                JSONArray jarr;
+                if ((jarr = headingObjects.optJSONArray(i)) != null)
+                {
+                    String parentId;
+                    if ((parentId = jarr.optString(1)) != null)
+                    {
+                        int parentIdInt = Integer.parseInt(parentId);
+                        if (parentIdInt != 0)
+                            headingArray[i].setParent(headingArray[Integer.parseInt(parentId)]);
+                    }
+                }
+            }
+            for (int i = 1; i < headingArray.length; i++)
+            {
+                if (headingArray[i] != null)
+                    headings.add(headingArray[i]);
+            }
+        }
+        if (title == "") title = "Failed";
+        processedQuery = new ArticleQuery(title, headings);
+        return processedQuery;
+    }
     public static Query generateQuery(String rawQuery)
     {
         Query processedQuery;

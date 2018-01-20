@@ -23,18 +23,15 @@ public class Result {
 
     public ResultSet getResultSet() { return this.resultSet;}
     public void setBestResult(int i) {this.bestResult = i;}
-    public void setResultParagraph(int i)
+    public void setResultParagraph()
     {
         try {
-            this.resultParagraph = meta.getItem("body", i);
+            this.resultParagraph = meta.getItem("body", this.bestResult);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public String getResultParagraph(int i)
-    {
-        return this.resultParagraph;
-    }
+    public String getResultParagraph(int i){return this.resultParagraph;}
     public Long getTimestamp() { return this.timestamp;}
 
 }

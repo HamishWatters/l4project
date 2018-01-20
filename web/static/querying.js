@@ -28,6 +28,17 @@ $(document).ready(function() {
             if (child.value == undefined) child = child.children[0];
             headingsObject[headings[i].getAttribute("data-identifier")] = [child.value,headings[i].getAttribute("data-parent")];
         }
-        console.log(headingsObject);
+        var query = {};
+        query["headings"] = headingsObject;
+        var response = "";
+        $.ajax({
+            url: "query",
+            type: "GET",
+            data: JSON.stringify(query),
+            success: function(data){
+                response = data;
+                $("body").html(response);
+            }
+        });
     });
 });

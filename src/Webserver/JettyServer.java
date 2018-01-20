@@ -7,36 +7,41 @@ import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.DefaultHandler;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.webapp.WebAppContext;
+import org.eclipse.jetty.server.handler.*;
+import org.eclipse.jetty.servlet.ServletHandler;
 
 import java.io.IOException;
 
 public class JettyServer {
     private Server webserver;
-    private QueryCoordinator coordinator;
+    private static QueryCoordinator coordinator;
 
     public JettyServer(String bindAddress, int port, String webappRoot) throws IOException
     {
+
+        org.eclipse.jetty.util.log.Log.setLog(null);
         webserver = new Server();
         ServerConnector connector = new ServerConnector(webserver);
         connector.setPort(port);
         if (bindAddress != null) connector.setHost(bindAddress);
         webserver.setConnectors(new Connector[]{connector});
 
-        WebAppContext webAppContext = new WebAppContext();
-        webAppContext.setContextPath("/");
-        webAppContext.setResourceBase(webappRoot);
+        ContextHandler context = new ContextHandler();
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setResourceBase("web/");
+        resourceHandler.setWelcomeFiles(new String[]{"index.html"});
 
-        ContextHandlerCollection contexts = new ContextHandlerCollection();
-        contexts.setHandlers(new Handler[]{webAppContext});
+        ServletHandler servletHandler = new ServletHandler();
+        servletHandler.addServletWithMapping(QueryServlet.class, "/query");
+
+        context.setContextPath("/");
+        context.setHandler(resourceHandler);
         HandlerCollection handlers = new HandlerCollection();
-        handlers.setHandlers(new Handler[]{contexts, new DefaultHandler()});
-        webserver.setHandler(handlers);
+        handlers.setHandlers(new Handler[] {context, servletHandler});
 
         coordinator = new QueryCoordinator();
+
+        webserver.setHandler(handlers);
     }
 
     public void executeQuery(String queryJson)
@@ -55,6 +60,11 @@ public class JettyServer {
     public void stop() throws Exception
     {
         webserver.stop();
+    }
+
+    public static QueryCoordinator getCoordinator()
+    {
+        return coordinator;
     }
 
     public static void main(String[] args) throws Exception
