@@ -49,8 +49,9 @@ public class QueryCoordinator {
                 heading.getAllNestedSubheadings(headingQueue);
             for (Heading heading : headingQueue)
             {
-                String queryString = convertHeadingToTerrierLanguage(title,heading, true);
+                String queryString = convertHeadingToTerrierLanguage(title,heading, false);
                 SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
+                srq.setOriginalQuery(queryString);
                 srq.addMatchingModel("Matching", query.getModel().name());
                 queryManager.runSearchRequest(srq);
                 heading.setResult(new Result(srq.getResultSet(), meta));
@@ -81,14 +82,14 @@ public class QueryCoordinator {
         while ((index = index.getParent()) != null) count++;
         StringBuilder terrierQuery = new StringBuilder();
         for (String s: title.split(" ")) {
-        terrierQuery.append(s);
+        terrierQuery.append("+").append(s);
         if (weighted)
             terrierQuery.append("^1.25");
         terrierQuery.append(" ");
         }
         for (String s: h.getHeading().split(" "))
         {
-            terrierQuery.append(s);
+            terrierQuery.append("+").append(s);
             if (weighted)
                 terrierQuery.append("^1.55");
             terrierQuery.append(" ");
@@ -97,13 +98,13 @@ public class QueryCoordinator {
         while (h.hasParent())
         {
             h = h.getParent();
-            terrierQuery.append(h.getHeading());
+            terrierQuery.append("+").append(h.getHeading());
             if (weighted)
                 terrierQuery.append("^").append(1-(n/10));
             terrierQuery.append(" ");
         }
         System.out.println(terrierQuery.toString());
-        return terrierQuery.toString();
+        return "("+terrierQuery.toString().toLowerCase()+")";
     }
 
     private String filterStopwords(String startQuery)

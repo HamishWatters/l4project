@@ -1,7 +1,7 @@
 $(document).ready(function() {
     var nextIdentifier = 1;
     $(".add-top-heading-btn").on("click", function() {
-        $(this).parents().eq(2).append("<div class=\"nested-query-box\" data-identifier=\""+(nextIdentifier++)+"\" data-parent=\"0\"><div class=\"col-lg-6\"><div class=\"input-group\"><input type=\"text\" class=\"form-control\" placeholder=\"Heading\"><span class=\"input-group-btn\"><button class=\"add-heading-btn btn btn-secondary\"><i class=\"fa fa-plus\"></i></button></span><span class=\"input-group-btn\"><button class=\"delete-heading-btn btn btn-secondary\"><i class=\"fa fa-minus\"></i></button></span></div></div></div>");
+        $(this).parents().eq(0).append("<div class=\"nested-query-box\" data-identifier=\""+(nextIdentifier++)+"\" data-parent=\"0\"><div class=\"col-lg-6\"><div class=\"input-group\"><input type=\"text\" class=\"form-control\" placeholder=\"Heading\"><span class=\"input-group-btn\"><button class=\"add-heading-btn btn btn-secondary\"><i class=\"fa fa-plus\"></i></button></span><span class=\"input-group-btn\"><button class=\"delete-heading-btn btn btn-secondary\"><i class=\"fa fa-minus\"></i></button></span></div></div></div>");
     });
 
     $(document).on("click", ".add-heading-btn", function() {
