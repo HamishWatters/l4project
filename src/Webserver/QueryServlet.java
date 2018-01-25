@@ -19,7 +19,7 @@ public class QueryServlet extends HttpServlet {
         Query query = UserQueryConverter.generateWebQuery(request.getQueryString());
         JettyServer.getCoordinator().executeQuery(query);
         ResultHandler handler = new ResultHandler(query);
-        handler.getBestDocumentNoDuplicates();
+        handler.getBestDocument();
         handler.printResults();
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);

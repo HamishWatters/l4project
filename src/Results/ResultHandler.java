@@ -25,6 +25,7 @@ public class ResultHandler {
      */
     public void getBestDocumentNoDuplicates()
     {
+        System.out.println("ma");
         HashMap<Integer, Heading> usedDocs = new HashMap<>();
         ArrayList<Heading> headingQueue = new ArrayList<>();
         for (Heading h: query.getHeadings())
@@ -49,7 +50,18 @@ public class ResultHandler {
         }
         for (Heading h: query.getHeadings())
             h.getResult().setResultParagraph();
+    }
 
+    public void getBestDocument()
+    {
+        ArrayList<Heading> headingQueue = new ArrayList<>();
+        for (Heading h: query.getHeadings())
+            h.getAllNestedSubheadings(headingQueue);
+        for (Heading h: headingQueue)
+        {
+            h.getResult().setBestResult(h.getResult().getResultSet().getDocids()[0]);
+            h.getResult().setResultParagraph();
+        }
     }
 
     /**
