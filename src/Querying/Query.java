@@ -3,8 +3,8 @@ package Querying;
 import java.util.List;
 
 public abstract class Query {
-    protected static final SearchModel DEFAULT_MODEL = SearchModel.PL2;
-    protected static final SearchEngine DEFAULT_ENGINE = SearchEngine.TERRIER;
+    private static final SearchModel DEFAULT_MODEL = SearchModel.DLH13;
+    private static final SearchEngine DEFAULT_ENGINE = SearchEngine.TERRIER;
 
     private static Long nextQueryId = 0L;
     private long queryId;
@@ -24,11 +24,11 @@ public abstract class Query {
     public abstract List<Heading> getHeadings();
     public abstract String getTitle();
 
-    public long getQueryId()
+    long getQueryId()
     {
         return this.queryId;
     }
-    public SearchModel getModel()
+    SearchModel getModel()
     {
         return this.model;
     }
@@ -41,11 +41,11 @@ public abstract class Query {
         return this.timestamp;
     }
 
-    public void setModel(SearchModel model)
+    void setModel(SearchModel model)
     {
         this.model = model;
     }
-    public void setEngine(SearchEngine engine)
+    void setEngine(SearchEngine engine)
     {
         this.engine = engine;
     }

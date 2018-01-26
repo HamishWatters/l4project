@@ -86,7 +86,7 @@ public class QueryCoordinator {
             terrierQuery.append("^1.25");
         terrierQuery.append(" ");
         }
-        for (String s: h.getHeading().split(" "))
+        for (String s: h.getName().split(" "))
         {
             terrierQuery.append(s);
             if (weighted)
@@ -97,7 +97,7 @@ public class QueryCoordinator {
         while (h.hasParent())
         {
             h = h.getParent();
-            terrierQuery.append(h.getHeading());
+            terrierQuery.append(h.getName());
             if (weighted)
                 terrierQuery.append("^").append(1-(n/10));
             terrierQuery.append(" ");
@@ -132,8 +132,6 @@ public class QueryCoordinator {
                 words.add(s);
                 s = br.readLine();
             }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,16 +1,14 @@
 import Querying.ArticleQuery;
 import Querying.Heading;
-import Querying.Query;
 import Querying.QueryCoordinator;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 
 public class ReadOutlines {
-    public static List<ArticleQuery> fromQrels(File qrelFiles)
+    private static List<ArticleQuery> fromQrels(File qrelFiles)
     {
         List<ArticleQuery> queries = new ArrayList<>();
         try {
@@ -32,7 +30,7 @@ public class ReadOutlines {
                 if (split.length > 1)
                 {
                     for (Heading h: query.getHeadings())
-                        if (h.getHeading().equals(split[1]))
+                        if (h.getName().equals(split[1]))
                             heading = h;
                     if (heading == null)
                     {
@@ -44,7 +42,7 @@ public class ReadOutlines {
                 {
                     boolean found = false;
                     for (Heading h: heading.getSubheadings())
-                        if (h.getHeading().equals(split[i]))
+                        if (h.getName().equals(split[i]))
                         {
                             heading = h;
                             found = true;

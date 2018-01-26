@@ -4,7 +4,6 @@ import Webserver.ClientQueryObjectAdaptor;
 import org.json.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class UserQueryConverter {
@@ -54,7 +53,7 @@ public class UserQueryConverter {
                     headings.add(headingArray[i]);
             }
         }
-        if (title == "") title = "Failed";
+        if (title.equals("")) title = "Failed";
         processedQuery = new ArticleQuery(title, headings);
         return processedQuery;
     }
@@ -131,13 +130,13 @@ public class UserQueryConverter {
     {
         JSONObject jobj;
         JSONArray jarr;
-        if ((jobj = object.optJSONObject(heading.getHeading())) != null)
+        if ((jobj = object.optJSONObject(heading.getName())) != null)
         {
             Heading h = new Heading(jobj.keys().next());
             heading.addSubheading(h);
             processHeadingJsonObject(jobj, h);
         }
-        else if((jarr = object.optJSONArray(heading.getHeading())) != null)
+        else if((jarr = object.optJSONArray(heading.getName())) != null)
         {
             processHeadingJsonArray(jarr, heading);
         }

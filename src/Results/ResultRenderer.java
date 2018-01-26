@@ -15,7 +15,7 @@ public class ResultRenderer {
 
     private static void renderRecurse(Heading h, StringBuilder sb)
     {
-        sb.append("<h5>").append(h.getHeading()).append("</h5>\n");
+        sb.append("<h5>").append(h.getName()).append("</h5>\n");
         sb.append("<p>").append(h.getResult().getResultParagraph(0)).append("</p>\n");
         for (Heading sh: h.getSubheadings())
             renderRecurse(sh,sb);

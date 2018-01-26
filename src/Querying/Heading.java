@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Heading {
-    String heading;
-    Heading parent;
-    List<Heading> subheadings;
-    Result result;
+    private String heading;
+    private Heading parent;
+    private List<Heading> subheadings;
+    private Result result;
 
     public Heading(String heading)
     {
@@ -36,24 +36,24 @@ public class Heading {
         return this.subheadings;
     }
 
-    public String getHeading()
+    public String getName()
     {
         return this.heading;
     }
 
     public boolean hasSubheadings() { return !this.subheadings.isEmpty();}
 
-    public Heading getParent() { return this.parent; }
+    Heading getParent() { return this.parent; }
 
-    public boolean hasParent() { return this.parent != null;}
+    boolean hasParent() { return this.parent != null;}
 
     public Result getResult() { return this.result; }
 
-    public void setParent(Heading parent) { this.parent = parent; }
+    void setParent(Heading parent) { this.parent = parent; }
 
-    public void setResult(Result result) { this.result = result; }
+    void setResult(Result result) { this.result = result; }
 
-    public void display()
+    void display()
     {
         System.out.print(this.heading);
         if (this.hasSubheadings()) {

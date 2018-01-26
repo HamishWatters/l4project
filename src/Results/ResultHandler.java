@@ -25,7 +25,6 @@ public class ResultHandler {
      */
     public void getBestDocumentNoDuplicates()
     {
-        System.out.println("ma");
         HashMap<Integer, Heading> usedDocs = new HashMap<>();
         ArrayList<Heading> headingQueue = new ArrayList<>();
         for (Heading h: query.getHeadings())
@@ -38,12 +37,11 @@ public class ResultHandler {
             int bestDoc = -1;
             for (int i = 0; i < docids.length; i++)
             {
-                if (usedDocs.containsKey(docids[i]))
-                    continue;
-                else
+                if (!usedDocs.containsKey(docids[i]))
                 {
                     usedDocs.put(docids[i], h);
                     bestDoc = docids[i];
+                    break;
                 }
             }
             h.getResult().setBestResult(bestDoc);
@@ -81,7 +79,7 @@ public class ResultHandler {
         {
             for (Heading heading: query.getHeadings())
             {
-                formattedResults.append(heading.getHeading()).append(NEW_LINE);
+                formattedResults.append(heading.getName()).append(NEW_LINE);
                 formattedResults.append(heading.getResult().getResultParagraph(0)).append(NEW_LINE);
                 if (heading.hasSubheadings())
                     recurseHeadingResults(formattedResults,heading);
@@ -99,7 +97,7 @@ public class ResultHandler {
     {
         for (Heading h: heading.getSubheadings())
         {
-            sb.append((h.getHeading())).append(NEW_LINE);
+            sb.append((h.getName())).append(NEW_LINE);
             sb.append(h.getResult().getResultParagraph(0)).append(NEW_LINE);
             if (h.hasSubheadings())
                 recurseHeadingResults(sb, h);
@@ -116,7 +114,7 @@ public class ResultHandler {
 
     /**
      * Writes the results to a specified file
-     * @param file
+     * @param  file destination for results
      */
     public void writeResults(File file)
     {
