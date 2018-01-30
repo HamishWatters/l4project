@@ -2,15 +2,19 @@ package Querying;
 
 import Querying.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SingleQuery extends Query {
-    private String queryText;
+    private Heading queryText;
+    private List<Heading> headings;
 
-    public SingleQuery(String queryText)
+    SingleQuery(String queryText)
     {
         super();
-        this.queryText = queryText;
+        this.queryText = new Heading(queryText);
+        this.headings = new ArrayList<>();
+        headings.add(this.queryText);
     }
 
     @Override
@@ -20,12 +24,10 @@ public class SingleQuery extends Query {
     }
 
     @Override
-    public List<Heading> getHeadings() {
-        return null;
-    }
+    public List<Heading> getHeadings() { return headings;}
 
     @Override
     public String getTitle() {
-        return queryText;
+        return "";
     }
 }

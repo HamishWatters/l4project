@@ -24,6 +24,10 @@ public class Heading {
         subheading.setParent(this);
     }
 
+    /**
+     * Adds all of this headings subheadings recursively into the provided headings list
+     * @param headings a list for all of this headings subheadings to be added to
+     */
     public void getAllNestedSubheadings(List<Heading> headings)
     {
         headings.add(this);

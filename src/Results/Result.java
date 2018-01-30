@@ -21,9 +21,10 @@ public class Result {
         this.bestResult = -1;
     }
 
-    public ResultSet getResultSet() { return this.resultSet;}
-    public void setBestResult(int i) {this.bestResult = i;}
-    public void setResultParagraph()
+    ResultSet getResultSet() { return this.resultSet;}
+    boolean hasMatching() { return this.bestResult > -1;}
+    void setBestResult(int i) {this.bestResult = i;}
+    void setResultParagraph()
     {
         try {
             this.resultParagraph = meta.getItem("body", this.bestResult);
@@ -31,7 +32,7 @@ public class Result {
             e.printStackTrace();
         }
     }
-    public String getResultParagraph(int i){return this.resultParagraph;}
+    String getResultParagraph(int i){return this.resultParagraph;}
     public Long getTimestamp() { return this.timestamp;}
 
 }

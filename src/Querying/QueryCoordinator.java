@@ -40,29 +40,19 @@ public class QueryCoordinator {
         fw.close();
     }
 
-    public void executeQuery(Query query) {
+    public void executeQuery(Query query)
+    {
         String title = filterStopwords(query.getTitle());
-        if (query.getHeadings() != null)
+        List<Heading> headingQueue = new ArrayList<>();
+        for (Heading heading: query.getHeadings())
+            heading.getAllNestedSubheadings(headingQueue);
+        for (Heading heading : headingQueue)
         {
-            List<Heading> headingQueue = new ArrayList<>();
-            for (Heading heading: query.getHeadings())
-                heading.getAllNestedSubheadings(headingQueue);
-            for (Heading heading : headingQueue)
-            {
-                String queryString = convertHeadingToTerrierLanguage(title,heading, false);
-                SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
-                srq.addMatchingModel("Matching", query.getModel().name());
-                queryManager.runSearchRequest(srq);
-                heading.setResult(new Result(srq.getResultSet(), meta));
-            }
-        }
-        else
-        {
-            SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), query.getTitle());
+            String queryString = convertHeadingToTerrierLanguage(title,heading, true);
+            SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
             srq.addMatchingModel("Matching", query.getModel().name());
             queryManager.runSearchRequest(srq);
-            //TODO: SingleQuery needs to retain results somehow now that results are stored under headings
-            //TODO: Maybe worth just having a single query use one heading object
+            heading.setResult(new Result(srq.getResultSet(), meta));
         }
     }
 

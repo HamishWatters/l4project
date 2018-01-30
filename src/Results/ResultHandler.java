@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class ResultHandler {
     private static final char NEW_LINE = '\n';
@@ -18,6 +19,49 @@ public class ResultHandler {
         this.query = query;
     }
 
+    public void getBestDocumentByScore()
+    {
+        HashMap<Integer, Heading> usedDocs = new HashMap<>();
+        HashMap<Integer, Double> docScores = new HashMap<>();
+        LinkedList<Heading> headingQueue = new LinkedList<>();
+        for (Heading h: query.getHeadings()) {
+            h.getAllNestedSubheadings(headingQueue);
+        }
+        Heading h;
+        while (!headingQueue.isEmpty())
+        {
+            h = headingQueue.pop();
+            if (!h.getResult().hasMatching())
+            {
+                int[] docids = h.getResult().getResultSet().getDocids();
+                double[] scores = h.getResult().getResultSet().getScores();
+                int bestDoc = -1;
+                for (int i = 0; i < docids.length; i++)
+                {
+                    if (!usedDocs.containsKey(docids[i]))
+                    {
+                        usedDocs.put(docids[i], h);
+                        docScores.put(docids[i], scores[i]);
+                        bestDoc = docids[i];
+                        break;
+                    }
+                    else if (scores[i] > docScores.get(docids[i]))
+                    {
+                        Heading oldHeading = usedDocs.get(docids[i]);
+                        oldHeading.getResult().setBestResult(-1);
+                        headingQueue.add(oldHeading);
+                        usedDocs.put(docids[i], h);
+                        docScores.put(docids[i], scores[i]);
+                        bestDoc = docids[i];
+                        break;
+                    }
+                }
+                h.getResult().setBestResult(bestDoc);
+            }
+        }
+        for (Heading heading: query.getHeadings())
+            heading.getResult().setResultParagraph();
+    }
     /**
      * For the current query, sets the result paragraph for each heading. Currently simply checks if a doc
      * has already been used, and if so, takes the next document etc.

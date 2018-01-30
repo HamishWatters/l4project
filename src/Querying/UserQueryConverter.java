@@ -18,8 +18,9 @@ public class UserQueryConverter {
         {
             JSONArray headingObjects = jsonObject.getJSONArray("headings");
             Heading[] headingArray = new Heading[headingObjects.length()];
-
             title = headingObjects.getJSONArray(0).getString(0);
+            if (headingArray.length == 1)
+                return new SingleQuery(title);
             for (int i = 1; i < headingObjects.length(); i++)
             {
                 JSONArray jarr;
