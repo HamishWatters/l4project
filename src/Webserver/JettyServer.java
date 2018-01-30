@@ -16,7 +16,7 @@ public class JettyServer {
     private Server webserver;
     private static QueryCoordinator coordinator;
 
-    public JettyServer(String bindAddress, int port, String webappRoot) throws IOException
+    public JettyServer(String bindAddress, int port) throws IOException
     {
 
         org.eclipse.jetty.util.log.Log.setLog(null);
@@ -69,9 +69,12 @@ public class JettyServer {
 
     public static void main(String[] args) throws Exception
     {
-        if (args.length != 2)
-            return;
-        new JettyServer(null, Integer.parseInt(args[0]), args[1]).start();
+        if (args.length != 1)
+        {
+            System.out.println("Usage: JettyServer <port>");
+            System.exit(1);
+        }
+        new JettyServer(null, Integer.parseInt(args[0])).start();
     }
 
 
