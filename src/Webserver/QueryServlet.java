@@ -23,7 +23,8 @@ public class QueryServlet extends HttpServlet {
         handler.printResults();
         response.setContentType("text/html");
         response.setStatus(HttpServletResponse.SC_OK);
-        response.getWriter().println(ResultRenderer.generateHtml(query));
+        response.getWriter().println(query.getQueryId());
+        ResultRenderer.writeHtml(query);
     }
 
 }

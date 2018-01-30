@@ -24,7 +24,7 @@ public abstract class Query {
     public abstract List<Heading> getHeadings();
     public abstract String getTitle();
 
-    long getQueryId()
+    public long getQueryId()
     {
         return this.queryId;
     }

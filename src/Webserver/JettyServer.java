@@ -1,8 +1,6 @@
 package Webserver;
 
-import Querying.Query;
 import Querying.QueryCoordinator;
-import Querying.UserQueryConverter;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -34,7 +32,7 @@ public class JettyServer {
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addServletWithMapping(QueryServlet.class, "/query");
 
-        context.setContextPath("/");
+        context.setContextPath("./");
         context.setHandler(resourceHandler);
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[] {context, servletHandler});
@@ -42,15 +40,6 @@ public class JettyServer {
         coordinator = new QueryCoordinator();
 
         webserver.setHandler(handlers);
-    }
-
-    public void executeQuery(String queryJson)
-    {
-        Query query = UserQueryConverter.generateQuery(queryJson);
-        coordinator.executeQuery(query);
-        /**
-         * Get results to client, somehow
-         */
     }
 
     public void start() throws Exception
