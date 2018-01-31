@@ -13,6 +13,7 @@ public class SingleQuery extends Query {
     {
         super();
         this.queryText = new Heading(queryText);
+        makeId();
         this.headings = new ArrayList<>();
         headings.add(this.queryText);
     }

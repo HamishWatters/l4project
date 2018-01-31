@@ -10,6 +10,7 @@ public class ArticleQuery extends Query {
     public ArticleQuery(String title, List<Heading> headings) {
         super();
         this.title = title;
+        makeId();
         this.headings = headings;
     }
 

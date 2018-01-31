@@ -16,7 +16,6 @@ public abstract class Query {
     {
         this.model = DEFAULT_MODEL;
         this.engine = DEFAULT_ENGINE;
-        this.queryId = getTitle() + String.valueOf(nextQueryId++);
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -27,6 +26,11 @@ public abstract class Query {
     public String getQueryId()
     {
         return this.queryId;
+    }
+    
+    protected void makeId()
+    {
+    	this.queryId = getTitle() + String.valueOf(nextQueryId++);
     }
     SearchModel getModel()
     {
