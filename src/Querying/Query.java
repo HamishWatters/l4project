@@ -7,7 +7,7 @@ public abstract class Query {
     private static final SearchEngine DEFAULT_ENGINE = SearchEngine.TERRIER;
 
     private static Long nextQueryId = 0L;
-    private long queryId;
+    private String queryId;
     private SearchModel model;
     private SearchEngine engine;
     private long timestamp;
@@ -16,7 +16,7 @@ public abstract class Query {
     {
         this.model = DEFAULT_MODEL;
         this.engine = DEFAULT_ENGINE;
-        this.queryId = nextQueryId++;
+        this.queryId = getTitle() + String.valueOf(nextQueryId++);
         this.timestamp = System.currentTimeMillis();
     }
 
@@ -24,7 +24,7 @@ public abstract class Query {
     public abstract List<Heading> getHeadings();
     public abstract String getTitle();
 
-    public long getQueryId()
+    public String getQueryId()
     {
         return this.queryId;
     }

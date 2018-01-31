@@ -49,7 +49,7 @@ public class QueryCoordinator {
         for (Heading heading : headingQueue)
         {
             String queryString = convertHeadingToTerrierLanguage(title,heading, true);
-            SearchRequest srq = queryManager.newSearchRequest(String.valueOf(query.getQueryId()), queryString);
+            SearchRequest srq = queryManager.newSearchRequest(query.getQueryId(), queryString);
             srq.addMatchingModel("Matching", query.getModel().name());
             queryManager.runSearchRequest(srq);
             heading.setResult(new Result(srq.getResultSet(), meta));

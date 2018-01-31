@@ -20,7 +20,7 @@ public class SingleQuery extends Query {
     @Override
     public void display()
     {
-        System.out.println(queryText);
+        System.out.println(queryText.getName());
     }
 
     @Override
@@ -28,6 +28,6 @@ public class SingleQuery extends Query {
 
     @Override
     public String getTitle() {
-        return "";
+        return queryText.getName();
     }
 }
