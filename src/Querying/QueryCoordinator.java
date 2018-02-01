@@ -25,16 +25,18 @@ public class QueryCoordinator {
         this.stoplist = importStoplist();
     }
 
-    public void generateTopicFile(List<ArticleQuery> queries) throws IOException {
+    public void generateTopicFile(List<Query> queries) throws IOException {
         FileWriter fw = new FileWriter("topics");
         for (Query q: queries)
         {
+            System.out.println(q.getId());
             List<Heading> headingQueue = new ArrayList<>();
             for (Heading h: q.getHeadings())
                 h.getAllNestedSubheadings(headingQueue);
             for (Heading h: headingQueue)
             {
-                fw.write(convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
+                if (q instanceof ArticleQuery) fw.write(q.getId() + " " + convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
+                else fw.write(q.getId() + " " + q.getTitle() + '\n');
             }
         }
         fw.close();
@@ -49,7 +51,7 @@ public class QueryCoordinator {
         for (Heading heading : headingQueue)
         {
             String queryString = convertHeadingToTerrierLanguage(title,heading, true);
-            SearchRequest srq = queryManager.newSearchRequest(query.getQueryId(), queryString);
+            SearchRequest srq = queryManager.newSearchRequest(query.getId(), queryString);
             srq.addMatchingModel("Matching", query.getModel().name());
             queryManager.runSearchRequest(srq);
             heading.setResult(new Result(srq.getResultSet(), meta));
@@ -70,11 +72,12 @@ public class QueryCoordinator {
         int count = 1;
         while ((index = index.getParent()) != null) count++;
         StringBuilder terrierQuery = new StringBuilder();
-        for (String s: title.split(" ")) {
-        terrierQuery.append(s);
-        if (weighted)
-            terrierQuery.append("^1.25");
-        terrierQuery.append(" ");
+        for (String s: title.split(" "))
+        {
+            terrierQuery.append(s);
+            if (weighted)
+                terrierQuery.append("^1.25");
+            terrierQuery.append(" ");
         }
         for (String s: h.getName().split(" "))
         {

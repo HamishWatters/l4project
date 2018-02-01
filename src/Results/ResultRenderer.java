@@ -24,7 +24,7 @@ public class ResultRenderer {
     public static void writeHtml(Query q)
     {
         try {
-            FileWriter fw = new FileWriter("web/results/" + q.getQueryId() + ".html");
+            FileWriter fw = new FileWriter("web/results/" + q.getId() + ".html");
             fw.write(generateHtml(q));
             fw.close();
         } catch (IOException e) {

@@ -9,7 +9,7 @@ public class SingleQuery extends Query {
     private Heading queryText;
     private List<Heading> headings;
 
-    SingleQuery(String queryText)
+    public SingleQuery(String queryText)
     {
         super();
         this.queryText = new Heading(queryText);

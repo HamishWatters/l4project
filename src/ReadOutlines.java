@@ -1,6 +1,4 @@
-import Querying.ArticleQuery;
-import Querying.Heading;
-import Querying.QueryCoordinator;
+import Querying.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,9 +6,9 @@ import java.io.IOException;
 import java.util.*;
 
 public class ReadOutlines {
-    private static List<ArticleQuery> fromQrels(File qrelFiles)
+    private static List<Query> fromQrels(File qrelFiles)
     {
-        List<ArticleQuery> queries = new ArrayList<>();
+        List<Query> queries = new ArrayList<>();
         try {
             Scanner s = new Scanner(qrelFiles);
             String line;
@@ -18,14 +16,19 @@ public class ReadOutlines {
             {
                 line = s.nextLine();
                 String rawquery = line.split(" ")[0];
-                rawquery = rawquery.replace("%20"," ").replace("%22"," ");
-                String[] split = rawquery.split("/");
-                ArticleQuery query = null;
-                for (ArticleQuery q: queries)
+                String safeQuery = rawquery.replace("%20"," ").replace("%22"," ");
+                String[] split = safeQuery.split("/");
+                Query query = null;
+                for (Query q: queries)
                     if (q.getTitle().equals(split[0]))
                         query = q;
                 if (query == null)
-                    query = new ArticleQuery(split[0],new ArrayList<>());
+                {
+                    if (split.length == 1)
+                        query = new SingleQuery(split[0]);
+                    else
+                        query = new ArticleQuery(split[0],new ArrayList<>());
+                }
                 Heading heading = null;
                 if (split.length > 1)
                 {
@@ -35,7 +38,7 @@ public class ReadOutlines {
                     if (heading == null)
                     {
                         heading = new Heading(split[1]);
-                        query.addHeading(heading);
+                        ((ArticleQuery)query).addHeading(heading);
                     }
                 }
                 for (int i =2; i < split.length; i++)
@@ -55,6 +58,7 @@ public class ReadOutlines {
                         heading = newHeading;
                     }
                 }
+                query.setId(rawquery);
                 queries.add(query);
             }
         } catch (FileNotFoundException e) {
@@ -65,7 +69,11 @@ public class ReadOutlines {
 
     public static void main(String[] args)
     {
-        List<ArticleQuery> queries = fromQrels(new File("/home/hamish/Documents/IndividualProject/benchmarkY1train/train.benchmarkY1train.fold0.cbor.hierarchical.qrels"));
+        if (args.length != 1)
+        {
+            System.out.println("Usage: ReadOutlines <qrelfile>");
+        }
+        List<Query> queries = fromQrels(new File(args[0]));
         QueryCoordinator q = new QueryCoordinator();
         try {
             q.generateTopicFile(queries);
