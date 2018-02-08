@@ -56,6 +56,14 @@ public class UserQueryConverter {
         }
         if (title.equals("")) title = "Failed";
         processedQuery = new ArticleQuery(title, headings);
+        if (jsonObject.has("model"))
+        {
+            String jmodel;
+            if ((jmodel = jsonObject.optString("model")) != null)
+            {
+                processedQuery.setModel(SearchModel.values()[Integer.parseInt(jmodel)]);
+            }
+        }
         return processedQuery;
     }
     public static Query generateQuery(String rawQuery)

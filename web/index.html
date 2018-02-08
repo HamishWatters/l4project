@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Passage Retrieval</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="static/querying-style.css">
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -12,41 +12,57 @@
     <script src="https://use.fontawesome.com/f642c64c0e.js"></script>
 </head>
 <body>
-        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-            <a class="navbar-brand" href="#">Passage Retrieval</a>
-            <div class="collapse navbar-collapse">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand back-btn" href="#">Passage Retrieval</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#">
-                        Search Model
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">BM25</a>
-                        <a class="dropdown-item" href="#">DLH13</a>
-                        <a class="dropdown-item" href="#">InL2</a>
-                        <a class="dropdown-item" href="#">PL2</a>
-                    </div>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#">
-                            Search Engine
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Terrier</a>
+                    <li class="nav-item">
+                        <form class="form-inline">
+                        <div class="input-group mb-3 margins">
+                            <div class="input-group-prepend ">
+                                <label class="input-group-text">Search Model</label>
+                            </div>
+                            <select class="custom-select search-model">
+                                <option value="1" selected="selected">DLH13</option>
+                                <option value="2">BM25</option>
+                                <option value="3">InL2</option>
+                                <option value="4">PL2</option>
+                            </select>
                         </div>
+                        </form>
                     </li>
-
+                    <!--<li class="nav-item">
+                            <input type="checkbox" class="custom-control-input eval-check">
+                    </li>
+                    <li class="nav-item">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="topicfile">
+                                <label class="custom-file-label" for="qrelfile">Upload Topics</label>
+                            </div>
+                        </form>
+                    </li>
+                    <li class="nav-item">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="qrelfile">
+                                <label class="custom-file-label" for="qrelfile">Upload Qrels</label>
+                            </div>
+                    </li>-->
                 </ul>
             </div>
         </nav>
-        <div class="input-group col-lg-6 query-box">
-            <input type="text" class="title form-control" placeholder="Title">
-            <span class="input-group-btn small-pad add-top-heading-btn">
-                <button class="btn full-height btn-secondary"><i class="fa fa-plus"></i></button>
-            </span>
-            <span class="input-group-btn small-pad">
-                <button class="search-btn full-height btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
-            </span>
+        <div class="display">
+            <div class="input-group col-lg-6 query-box">
+             <input type="text" class="title form-control" placeholder="Title">
+              <span class="input-group-btn small-pad add-top-heading-btn">
+                  <button class="btn full-height btn-secondary"><i class="fa fa-plus"></i></button>
+              </span>
+               <span class="input-group-btn small-pad">
+                   <button class="search-btn full-height btn btn-secondary" type="button"><i class="fa fa-search"></i></button>
+               </span>
+            </div>
         </div>
 </body>
 </html>

@@ -41,3 +41,26 @@
 .small-pad {
     padding: 3px;
 }
+.back-btn {
+    margin: 10px;
+}
+.margins {
+    margin: auto;
+}
+.my-file-upload {
+    width: 10%;
+}
+h3 {
+    text-align: center;
+}
+h5 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+p {
+    margin: auto;
+    width: 75%;
+    border: 2px solid black;
+    border-radius: 5px;
+}
