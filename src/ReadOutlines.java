@@ -11,11 +11,15 @@ public class ReadOutlines {
         List<Query> queries = new ArrayList<>();
         try {
             Scanner s = new Scanner(qrelFiles);
-            String line;
+            String line, oldquery = "";
             while (s.hasNextLine())
             {
+                boolean newQuery = false;
                 line = s.nextLine();
                 String rawquery = line.split(" ")[0];
+                if (rawquery.equals(oldquery))
+                    continue;
+                oldquery = rawquery;
                 String safeQuery = rawquery.replace("%20"," ").replace("%22"," ");
                 String[] split = safeQuery.split("/");
                 Query query = null;
@@ -26,8 +30,10 @@ public class ReadOutlines {
                 {
                     if (split.length == 1)
                         query = new SingleQuery(split[0]);
-                    else
-                        query = new ArticleQuery(split[0],new ArrayList<>());
+                    else {
+                        query = new ArticleQuery(split[0], new ArrayList<>());
+                    }
+                    newQuery = true;
                 }
                 Heading heading = null;
                 if (split.length > 1)
@@ -38,6 +44,8 @@ public class ReadOutlines {
                     if (heading == null)
                     {
                         heading = new Heading(split[1]);
+                        if (split.length == 2)
+                            heading.setId(rawquery);
                         ((ArticleQuery)query).addHeading(heading);
                     }
                 }
@@ -53,13 +61,20 @@ public class ReadOutlines {
                         }
                     if (!found)
                     {
+                        System.out.println("Created new subheading " + split[i] + " at depth " + i + " for query " + rawquery);
                         Heading newHeading = new Heading(split[i]);
+                        if (i == split.length -1)
+                            newHeading.setId(rawquery);
                         heading.addSubheading(newHeading);
                         heading = newHeading;
                     }
                 }
-                query.setId(rawquery);
-                queries.add(query);
+                if (newQuery)
+                {
+                    query.setId(query.getTitle());
+                    queries.add(query);
+                }
+
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -74,6 +89,7 @@ public class ReadOutlines {
             System.out.println("Usage: ReadOutlines <qrelfile>");
         }
         List<Query> queries = fromQrels(new File(args[0]));
+        System.out.println("bam"+queries.size());
         QueryCoordinator q = new QueryCoordinator();
         try {
             q.generateTopicFile(queries);

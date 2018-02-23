@@ -39,6 +39,14 @@ public class ArticleQuery extends Query {
         this.headings.add(h);
     }
 
+    Heading getHeading(String headingStr)
+    {
+        for (Heading h: headings)
+            if (h.getName().equals(headingStr))
+                return h;
+        return null;
+    }
+
     public Heading getHeading(int headingNumber) {
         if (headingNumber >= headings.size())
             return null;

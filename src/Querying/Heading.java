@@ -9,6 +9,7 @@ public class Heading {
     private Heading parent;
     private List<Heading> subheadings;
     private Result result;
+    private String id;
 
     public Heading(String heading)
     {
@@ -39,6 +40,18 @@ public class Heading {
     {
         return this.subheadings;
     }
+
+    Heading getSubheading(String headingStr)
+    {
+        for (Heading h: subheadings)
+            if (h.getName().equals(headingStr))
+                return h;
+        return null;
+    }
+
+    public void setId(String id) { this.id = id; }
+
+    String getId() { return this.id; }
 
     public String getName()
     {

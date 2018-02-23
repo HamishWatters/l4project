@@ -44,13 +44,16 @@ public class UserQueryConverter {
                     {
                         int parentIdInt = Integer.parseInt(parentId);
                         if (parentIdInt != 0)
-                            headingArray[i].setParent(headingArray[Integer.parseInt(parentId)]);
+                        {
+                            headingArray[i].setParent(headingArray[parentIdInt]);
+                            headingArray[parentIdInt].addSubheading(headingArray[i]);
+                        }
                     }
                 }
             }
             for (int i = 1; i < headingArray.length; i++)
             {
-                if (headingArray[i] != null)
+                if (headingArray[i] != null && !headingArray[i].hasParent())
                     headings.add(headingArray[i]);
             }
         }

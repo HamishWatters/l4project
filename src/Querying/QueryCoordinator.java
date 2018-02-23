@@ -35,8 +35,8 @@ public class QueryCoordinator {
                 h.getAllNestedSubheadings(headingQueue);
             for (Heading h: headingQueue)
             {
-                if (q instanceof ArticleQuery) fw.write(q.getId() + " " + convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
-                else fw.write(q.getId() + " " + q.getTitle() + '\n');
+                if (q instanceof ArticleQuery && h.getId() != null) fw.write(h.getId() + " " + convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
+                //else fw.write(q.getId() + " " + q.getTitle() + '\n');
             }
         }
         fw.close();
@@ -72,31 +72,53 @@ public class QueryCoordinator {
         int count = 1;
         while ((index = index.getParent()) != null) count++;
         StringBuilder terrierQuery = new StringBuilder();
-        for (String s: title.split(" "))
+        String[] tSplit = filterStopwords(removePunctuation(title)).split(" ");
+        for (String s: tSplit)
         {
             terrierQuery.append(s);
             if (weighted)
                 terrierQuery.append("^1.25");
             terrierQuery.append(" ");
         }
-        for (String s: h.getName().split(" "))
+        if (tSplit.length > 2)
+        {
+            for (String s: tSplit)
+                terrierQuery.append(s.substring(0,1));
+            terrierQuery.append(" ");
+        }
+        String[] hSplit = filterStopwords(removePunctuation(h.getName())).split(" ");
+        for (String s: hSplit)
         {
             terrierQuery.append(s);
             if (weighted)
                 terrierQuery.append("^1.55");
             terrierQuery.append(" ");
         }
+        if (hSplit.length > 2)
+        {
+
+            for (String s: hSplit) {
+                if (s.length() > 0)
+                    terrierQuery.append(s.substring(0, 1));
+            }
+            terrierQuery.append(" ");
+        }
         float n = 1;
         while (h.hasParent())
         {
             h = h.getParent();
-            terrierQuery.append(h.getName());
+            terrierQuery.append(removePunctuation(h.getName()));
             if (weighted)
                 terrierQuery.append("^").append(1-(n/10));
             terrierQuery.append(" ");
         }
-        System.out.println(terrierQuery.toString());
-        return "("+terrierQuery.toString().toLowerCase()+")";
+        //System.out.println(terrierQuery.toString());
+        return terrierQuery.toString().toLowerCase();
+    }
+
+    private String removePunctuation(String str)
+    {
+        return str.replaceAll("[:.]","").replace("-"," ");
     }
 
     private String filterStopwords(String startQuery)
@@ -107,7 +129,8 @@ public class QueryCoordinator {
             if (!stoplist.contains(word))
                 endQueryBuilder.append(word).append(" ");
         }
-        endQueryBuilder.setLength(endQueryBuilder.length()-1);
+        if (endQueryBuilder.length() > 0)
+            endQueryBuilder.setLength(endQueryBuilder.length()-1);
         return endQueryBuilder.toString();
     }
 
@@ -130,5 +153,4 @@ public class QueryCoordinator {
         }
         return words;
     }
-
 }

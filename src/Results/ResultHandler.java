@@ -60,6 +60,8 @@ public class ResultHandler {
             }
         }
         for (Heading heading: query.getHeadings())
+            heading.getAllNestedSubheadings(headingQueue);
+        for (Heading heading: headingQueue)
             heading.getResult().setResultParagraph();
     }
     /**
