@@ -1,7 +1,7 @@
 $(document).ready(function()
 {
     var original = $(".display").html();
-    var varboxdata = []
+    var varboxdata = [];
     var nextIdentifier = 1;
     $(document).on("click", ".add-top-heading-btn", function()
     {
@@ -21,21 +21,17 @@ $(document).ready(function()
     $(document).on("click", ".back-btn", function()
     {
         $(".display").html(original);
-         for (node in document.getElementsByClassName("valbox"))
-         {
-             var va = varboxdata.shift()
-             console.log("setting "+node+" to "+va)
-             node.value = varboxdata.shift()
-         }
+        var nodes = document.getElementsByClassName("valbox");
+        for (var i = 0; i < nodes.length; i++ )
+            nodes[i].value = varboxdata.shift();
     });
     $(document).on("click", ".search-btn", function()
     {
         original = $(".display").html();
-        for (node in document.getElementsByClassName("valbox"))
-        {            
-varboxdata.push(node.value)
-console.log(varboxdata)        
-}
+        varboxdata = [];
+        var nodes = document.getElementsByClassName("valbox");
+        for (var i = 0; i < nodes.length; i++ )
+            varboxdata.push(nodes[i].value);
         var root = $(".query-box");
         var headings = root.find(".nested-query-box");
         var headingsObject = [];
