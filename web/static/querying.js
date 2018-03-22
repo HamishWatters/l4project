@@ -26,7 +26,6 @@ $(document).ready(function()
         for (var i = 0; i < nodes.length; i++ )
             nodes[i].value = varboxdata.shift();
     });
-    $("#topicfile").change(function() {
     $(document).on("click", ".search-btn", function()
     {
         timestamp = new Date().getTime();
