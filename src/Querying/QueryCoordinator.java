@@ -35,7 +35,7 @@ public class QueryCoordinator {
                 h.getAllNestedSubheadings(headingQueue);
             for (Heading h: headingQueue)
             {
-                if (q instanceof ArticleQuery && h.getId() != null) fw.write(h.getId() + " " + convertHeadingToTerrierLanguage(q.getTitle(), h, true) + '\n');
+                if (q instanceof ArticleQuery && h.getId() != null) fw.write(h.getId() + " " + convertHeadingToTerrierLanguage(q.getTitle(), h) + '\n');
                 //else fw.write(q.getId() + " " + q.getTitle() + '\n');
             }
         }
@@ -50,7 +50,7 @@ public class QueryCoordinator {
             heading.getAllNestedSubheadings(headingQueue);
         for (Heading heading : headingQueue)
         {
-            String queryString = convertHeadingToTerrierLanguage(title,heading, true);
+            String queryString = convertHeadingToTerrierLanguage(title,heading);
             SearchRequest srq = queryManager.newSearchRequest(query.getId(), queryString);
             srq.addMatchingModel("Matching", query.getModel().name());
             queryManager.runSearchRequest(srq);
@@ -66,19 +66,22 @@ public class QueryCoordinator {
      * the specified heading, and gives decreasing weights the further nested the heading has eg. the
      * query title will have weight multiplied by how many parent headings the specified heading has
      */
-    private String convertHeadingToTerrierLanguage(String title, Heading h, boolean weighted)
+    private String convertHeadingToTerrierLanguage(String title, Heading h)
     {
         Heading index = h;
+        Set<String> usedTerms = new HashSet<>();
         int count = 1;
         while ((index = index.getParent()) != null) count++;
         StringBuilder terrierQuery = new StringBuilder();
         String[] tSplit = filterStopwords(removePunctuation(title)).split(" ");
         for (String s: tSplit)
         {
-            terrierQuery.append(s);
-            if (weighted)
-                terrierQuery.append("^1.25");
-            terrierQuery.append(" ");
+            if (!usedTerms.contains(s))
+            {
+                usedTerms.add(s);
+                terrierQuery.append(s);
+                terrierQuery.append("^1.25 ");
+            }
         }
         if (tSplit.length > 2)
         {
@@ -89,10 +92,12 @@ public class QueryCoordinator {
         String[] hSplit = filterStopwords(removePunctuation(h.getName())).split(" ");
         for (String s: hSplit)
         {
-            terrierQuery.append(s);
-            if (weighted)
-                terrierQuery.append("^1.55");
-            terrierQuery.append(" ");
+            if (!usedTerms.contains(s))
+            {
+                usedTerms.add(s);
+                terrierQuery.append(s);
+                terrierQuery.append("^1.55 ");
+            }
         }
         if (hSplit.length > 2)
         {
@@ -107,12 +112,10 @@ public class QueryCoordinator {
         while (h.hasParent())
         {
             h = h.getParent();
-            terrierQuery.append(removePunctuation(h.getName()));
-            if (weighted)
-                terrierQuery.append("^").append(1-(n/10));
+            terrierQuery.append(filterStopwords(removePunctuation(h.getName())));
+            terrierQuery.append("^").append(1-(n/10));
             terrierQuery.append(" ");
         }
-        //System.out.println(terrierQuery.toString());
         return terrierQuery.toString().toLowerCase();
     }
 

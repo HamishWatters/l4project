@@ -12,8 +12,10 @@ public class ReadOutlines {
         try {
             Scanner s = new Scanner(qrelFiles);
             String line, oldquery = "";
+            int it = 0;
             while (s.hasNextLine())
             {
+                it++;
                 boolean newQuery = false;
                 line = s.nextLine();
                 String rawquery = line.split(" ")[0];
@@ -47,6 +49,7 @@ public class ReadOutlines {
                         if (split.length == 2)
                             heading.setId(rawquery);
                         ((ArticleQuery)query).addHeading(heading);
+                        //System.out.println("Created new top level heading: "+split[1]);
                     }
                 }
                 for (int i =2; i < split.length; i++)
@@ -61,7 +64,7 @@ public class ReadOutlines {
                         }
                     if (!found)
                     {
-                        System.out.println("Created new subheading " + split[i] + " at depth " + i + " for query " + rawquery);
+                        //System.out.println("Created new subheading " + split[i] + " at depth " + i + " for query " + rawquery);
                         Heading newHeading = new Heading(split[i]);
                         if (i == split.length -1)
                             newHeading.setId(rawquery);
@@ -74,7 +77,6 @@ public class ReadOutlines {
                     query.setId(query.getTitle());
                     queries.add(query);
                 }
-
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();

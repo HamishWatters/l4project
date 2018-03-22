@@ -31,6 +31,8 @@ public class JettyServer {
 
         ServletHandler servletHandler = new ServletHandler();
         servletHandler.addServletWithMapping(QueryServlet.class, "/query");
+        servletHandler.addServletWithMapping(EvaluateServlet.class, "/evaluate");
+
 
         context.setContextPath("./");
         context.setHandler(resourceHandler);

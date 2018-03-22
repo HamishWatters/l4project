@@ -10,11 +10,11 @@ public class ResultRenderer {
 
     public static String generateHtml(Query q)
     {
-        StringBuilder html = new StringBuilder ("<h3>");
+        StringBuilder html = new StringBuilder ("<div class=\"timestamp-label\"></div>\n<div class=\"results-display\"><h3>");
         html.append(q.getTitle()).append("</h3>\n");
         for (Heading h: q.getHeadings())
             renderRecurse(h, html);
-        html.append("</body>");
+        html.append("</div></body>");
         return html.toString();
     }
 
