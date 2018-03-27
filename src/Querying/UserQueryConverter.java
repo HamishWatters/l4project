@@ -1,6 +1,5 @@
 package Querying;
 
-import Webserver.ClientQueryObjectAdaptor;
 import org.json.*;
 
 import java.util.ArrayList;
@@ -10,7 +9,7 @@ public class UserQueryConverter {
 
     public static Query generateWebQuery(String webQuery)
     {
-        JSONObject jsonObject = new JSONObject(ClientQueryObjectAdaptor.convertJson(webQuery));
+        JSONObject jsonObject = new JSONObject(webQuery.replace("%22"," ").replace("%20", " "));
         Query processedQuery;
         String title = "";
         List<Heading> headings = new ArrayList<>();
